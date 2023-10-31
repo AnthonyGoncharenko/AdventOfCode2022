@@ -32,7 +32,7 @@ fn call_day(day: i32) -> Result<(), AdventError> {
         2 => days::day_02::solution(),
         3 => days::day_03::solution(),
         4 => days::day_04::solution(),
-        // 5 => days::day5::solution(),
+        5 => days::day_05::solution(),
         // 6 => days::day6::solution(),
         // 7 => days::day7::solution(),
         // 8 => days::day8::solution(),
