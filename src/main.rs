@@ -10,16 +10,13 @@ pub enum AdventError {
 
 fn main() -> Result<(), AdventError> {
     let args: Vec<String> = env::args().collect();
-    dbg!(&args);
 
     if let Some(day) = args.get(1) {
         let parsed_day = match day.parse::<i32>() {
             Ok(t) => t,
             Err(e) => return Err(AdventError::ParseInt(e.to_string())),
         };
-        if let Err(e) = call_day(parsed_day) {
-            return Err(e);
-        }
+        call_day(parsed_day)?
     } else {
         return Err(AdventError::MissingArg(
             "Usage :: cargo run [day]".to_string(),
@@ -41,8 +38,9 @@ fn call_day(day: i32) -> Result<(), AdventError> {
         // 8 => days::day8::solution(),
         // 9 => days::day9::solution(),
         // 10 => days::day10::solution(),
-        e => Err(AdventError::NotAdventNumber(
-            format!("This day: [{}], is not very Adventy!", e).to_string(),
-        )),
+        e => Err(AdventError::NotAdventNumber(format!(
+            "This day: [{}], is not very Adventy!",
+            e
+        ))),
     }
 }

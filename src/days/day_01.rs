@@ -7,7 +7,7 @@ fn part_one(input: &str) -> i32 {
         }
         max = std::cmp::max(max, curr_max);
     }
-    return max;
+    max
 }
 fn part_two(input: &str) -> i32 {
     let mut sum = 0;
@@ -31,8 +31,8 @@ fn part_two(input: &str) -> i32 {
 pub fn solution() -> Result<(), crate::AdventError> {
     let input = include_str!("./inputs/01.txt");
 
-    println!("Part One's Answer: [{}]", part_one(&input));
-    println!("Part Two's Answer: [{}]", part_two(&input));
+    println!("Part One's Answer: [{}]", part_one(input));
+    println!("Part Two's Answer: [{}]", part_two(input));
 
     Ok(())
 }
@@ -57,10 +57,10 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        assert_eq!(part_one(&TEST_INPUT), 24_000)
+        assert_eq!(part_one(TEST_INPUT), 24_000)
     }
     #[test]
     fn test_part_two() {
-        assert_eq!(part_two(&TEST_INPUT), 45_000)
+        assert_eq!(part_two(TEST_INPUT), 45_000)
     }
 }

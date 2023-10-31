@@ -9,15 +9,13 @@ fn part_one(input: &str) -> i32 {
         for (idx, ch) in chars.enumerate() {
             if idx < len / 2 {
                 hashset.insert(ch);
-            } else {
-                if hashset.contains(&ch) {
-                    if ch.is_lowercase() {
-                        sum += (ch as i32) - 96;
-                    } else {
-                        sum += (ch as i32) - 64 + 26;
-                    }
-                    break;
+            } else if hashset.contains(&ch) {
+                if ch.is_lowercase() {
+                    sum += (ch as i32) - 96;
+                } else {
+                    sum += (ch as i32) - 64 + 26;
                 }
+                break;
             }
         }
     }
@@ -65,8 +63,8 @@ fn part_two(input: &str) -> i32 {
 pub fn solution() -> Result<(), crate::AdventError> {
     let input = include_str!("./inputs/03.txt");
 
-    println!("Part One's Answer is : [{}].", part_one(&input));
-    println!("Part Two's Answer is : [{}].", part_two(&input));
+    println!("Part One's Answer is : [{}].", part_one(input));
+    println!("Part Two's Answer is : [{}].", part_two(input));
 
     Ok(())
 }
@@ -83,10 +81,10 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw";
     #[test]
     fn test_part_one() {
-        assert_eq!(part_one(&TEST_INPUT), 157)
+        assert_eq!(part_one(TEST_INPUT), 157)
     }
     #[test]
     fn test_part_two() {
-        assert_eq!(part_two(&TEST_INPUT), 70)
+        assert_eq!(part_two(TEST_INPUT), 70)
     }
 }

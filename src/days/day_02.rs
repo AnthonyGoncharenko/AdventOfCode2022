@@ -5,7 +5,7 @@ fn part_one(input: &str) -> i32 {
     let mut score = 0;
     for line in input.lines() {
         let choices = line.split_ascii_whitespace().collect::<Vec<_>>();
-        let opp_choice = match rps_strategy::OpponentStrategy::from_str(choices.get(0).unwrap()) {
+        let opp_choice = match rps_strategy::OpponentStrategy::from_str(choices.first().unwrap()) {
             Ok(o) => o,
             Err(e) => {
                 println!("{:#?}", e);
@@ -20,8 +20,8 @@ fn part_one(input: &str) -> i32 {
             }
         };
 
-        let opp_choice = rps_strategy::RPS::from_opponent(opp_choice);
-        let my_choice = rps_strategy::RPS::from_me(my_choice);
+        let opp_choice = rps_strategy::Rps::from_opponent(opp_choice);
+        let my_choice = rps_strategy::Rps::from_me(my_choice);
         score += match my_choice.cmp(&opp_choice) {
             std::cmp::Ordering::Less => 0,
             std::cmp::Ordering::Equal => 3,
@@ -35,7 +35,7 @@ fn part_two(input: &str) -> i32 {
     let mut score = 0;
     for line in input.lines() {
         let choices: Vec<&str> = line.split_ascii_whitespace().collect();
-        let opp_choice = match rps_strategy::OpponentStrategy::from_str(choices.get(0).unwrap()) {
+        let opp_choice = match rps_strategy::OpponentStrategy::from_str(choices.first().unwrap()) {
             Ok(o) => o,
             Err(e) => {
                 println!("{:#?}", e);
@@ -50,8 +50,8 @@ fn part_two(input: &str) -> i32 {
             }
         };
 
-        let opp_choice = rps_strategy::RPS::from_opponent(opp_choice);
-        let my_choice = rps_strategy::RPS::from_me_truth(&my_choice, &opp_choice);
+        let opp_choice = rps_strategy::Rps::from_opponent(opp_choice);
+        let my_choice = rps_strategy::Rps::from_me_truth(&my_choice, &opp_choice);
         score += match my_choice.cmp(&opp_choice) {
             std::cmp::Ordering::Less => 0,
             std::cmp::Ordering::Equal => 3,
@@ -65,8 +65,8 @@ fn part_two(input: &str) -> i32 {
 pub fn solution() -> Result<(), crate::AdventError> {
     let input = include_str!("./inputs/02.txt");
 
-    println!("Part One's Score: [{}]", part_one(&input));
-    println!("Part Two's Score: [{}]", part_two(&input));
+    println!("Part One's Score: [{}]", part_one(input));
+    println!("Part Two's Score: [{}]", part_two(input));
     Ok(())
 }
 
@@ -79,12 +79,12 @@ B X
 C Z";
     #[test]
     fn test_part_one() {
-        assert_eq!(part_one(&TEST_INPUT), 15)
+        assert_eq!(part_one(TEST_INPUT), 15)
     }
 
     #[test]
     fn test_part_two() {
-        assert_eq!(part_two(&TEST_INPUT), 12)
+        assert_eq!(part_two(TEST_INPUT), 12)
     }
 }
 
@@ -92,10 +92,10 @@ mod rps_strategy {
     use std::{cmp::Ordering, str::FromStr};
 
     #[derive(PartialOrd, Eq, PartialEq)]
-    pub enum RPS {
-        ROCK,
-        PAPER,
-        SCISSORS,
+    pub enum Rps {
+        Rock,
+        Paper,
+        Scissors,
     }
     pub enum OpponentStrategy {
         A,
@@ -109,74 +109,74 @@ mod rps_strategy {
         Z,
     }
 
-    impl RPS {
-        pub fn from_opponent(opp_strat: OpponentStrategy) -> RPS {
+    impl Rps {
+        pub fn from_opponent(opp_strat: OpponentStrategy) -> Rps {
             use OpponentStrategy as OS;
             match opp_strat {
-                OS::A => Self::ROCK,
-                OS::B => Self::PAPER,
-                OS::C => Self::SCISSORS,
+                OS::A => Self::Rock,
+                OS::B => Self::Paper,
+                OS::C => Self::Scissors,
             }
         }
-        pub fn from_me(my_strat: MyStrategy) -> RPS {
+        pub fn from_me(my_strat: MyStrategy) -> Rps {
             use MyStrategy as MS;
             match my_strat {
-                MS::X => Self::ROCK,
-                MS::Y => Self::PAPER,
-                MS::Z => Self::SCISSORS,
+                MS::X => Self::Rock,
+                MS::Y => Self::Paper,
+                MS::Z => Self::Scissors,
             }
         }
-        pub fn from_me_truth(my_strat: &MyStrategy, opp_strat: &RPS) -> RPS {
+        pub fn from_me_truth(my_strat: &MyStrategy, opp_strat: &Rps) -> Rps {
             use MyStrategy as MS;
             match opp_strat {
                 // Rock
-                Self::ROCK => match my_strat {
-                    MS::X => Self::SCISSORS, // Lose
-                    MS::Y => Self::ROCK,     // Draw
-                    MS::Z => Self::PAPER,    // Win
+                Self::Rock => match my_strat {
+                    MS::X => Self::Scissors, // Lose
+                    MS::Y => Self::Rock,     // Draw
+                    MS::Z => Self::Paper,    // Win
                 },
                 // Paper
-                Self::PAPER => match my_strat {
-                    MS::X => Self::ROCK,
-                    MS::Y => Self::PAPER,
-                    MS::Z => Self::SCISSORS,
+                Self::Paper => match my_strat {
+                    MS::X => Self::Rock,
+                    MS::Y => Self::Paper,
+                    MS::Z => Self::Scissors,
                 },
                 // Scissors
-                Self::SCISSORS => match my_strat {
-                    MS::X => Self::PAPER,
-                    MS::Y => Self::SCISSORS,
-                    MS::Z => Self::ROCK,
+                Self::Scissors => match my_strat {
+                    MS::X => Self::Paper,
+                    MS::Y => Self::Scissors,
+                    MS::Z => Self::Rock,
                 },
             }
         }
     }
-    impl Ord for RPS {
+    impl Ord for Rps {
         fn cmp(&self, other: &Self) -> Ordering {
             match self {
-                RPS::PAPER => match other {
-                    RPS::PAPER => Ordering::Equal,
-                    RPS::ROCK => Ordering::Greater,
-                    RPS::SCISSORS => Ordering::Less,
+                Rps::Paper => match other {
+                    Rps::Paper => Ordering::Equal,
+                    Rps::Rock => Ordering::Greater,
+                    Rps::Scissors => Ordering::Less,
                 },
-                RPS::ROCK => match other {
-                    RPS::PAPER => Ordering::Less,
-                    RPS::ROCK => Ordering::Equal,
-                    RPS::SCISSORS => Ordering::Greater,
+                Rps::Rock => match other {
+                    Rps::Paper => Ordering::Less,
+                    Rps::Rock => Ordering::Equal,
+                    Rps::Scissors => Ordering::Greater,
                 },
-                RPS::SCISSORS => match other {
-                    RPS::PAPER => Ordering::Greater,
-                    RPS::ROCK => Ordering::Less,
-                    RPS::SCISSORS => Ordering::Equal,
+                Rps::Scissors => match other {
+                    Rps::Paper => Ordering::Greater,
+                    Rps::Rock => Ordering::Less,
+                    Rps::Scissors => Ordering::Equal,
                 },
             }
         }
     }
-    impl From<RPS> for i32 {
-        fn from(val: RPS) -> Self {
+    impl From<Rps> for i32 {
+        fn from(val: Rps) -> Self {
             match val {
-                RPS::ROCK => 1,
-                RPS::PAPER => 2,
-                RPS::SCISSORS => 3,
+                Rps::Rock => 1,
+                Rps::Paper => 2,
+                Rps::Scissors => 3,
             }
         }
     }
