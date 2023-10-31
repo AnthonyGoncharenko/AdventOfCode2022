@@ -40,12 +40,13 @@ fn part_two(input: &str) -> i32 {
     ret
 }
 
-fn main() {
-    let input = include_str!("./input.txt");
-    let ans1 = part_one(&input);
-    println!("Part One's Answer: [{ans1}].");
-    let ans2 = part_two(&input);
-    println!("Part Two's Answer: [{ans2}].");
+pub fn solution() -> Result<(), crate::AdventError> {
+    let input = include_str!("./inputs/04.txt");
+
+    println!("Part One's Answer: [{}].", part_one(&input));
+    println!("Part Two's Answer: [{}].", part_two(&input));
+
+    Ok(())
 }
 
 #[cfg(test)]

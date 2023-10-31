@@ -28,11 +28,13 @@ fn part_two(input: &str) -> i32 {
     sum
 }
 
-fn main() {
-    let input = include_str!("input.txt");
+pub fn solution() -> Result<(), crate::AdventError> {
+    let input = include_str!("./inputs/01.txt");
 
     println!("Part One's Answer: [{}]", part_one(&input));
     println!("Part Two's Answer: [{}]", part_two(&input));
+
+    Ok(())
 }
 
 #[cfg(test)]
